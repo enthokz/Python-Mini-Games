@@ -1,42 +1,4 @@
-# while True:
-#     try:
-#         msg= str(input('PIlih nomor bereapa?'))
-#         print(msg)
-#         break
-#     except:
-#         print('ANda memasukan pilihan yang salah')
-
-import re
-# def coba(msg,pilihan):
-#     while True:
-#         form= str(input(msg))
-#         while not re.match(r'\d',form):
-#             print('cek kembali!')
-#             form= input(msg)
-#         if form in pilihan:
-#             break
-#         else:
-#             print('Jawaban tidak ada dalam pilihan, Cek kambali!')
-#     print (f'Jabawan adalah {form}')
-
-# coba('No berapa yang kamu pilih?',['1','2'])
-
-# Harus habis dibagi dua dan kelipatan 5
-# def coba():
-#     while True:
-#         put= int(input('Masukan Angka!'))
-#         if put %2 !=0:
-#             print('Tidak bisa dibagi dua')
-#         if put %5 !=0:
-#             print('Tidak bisa habis dibagi lima')
-#         elif put %2==0 and put %5==0:
-#             break
-#     while put<40:
-#         print(put)
-#         put+=1
-# coba()
-
-# Dict Petanyaan
+## Dict Petanyaan
 data= {'index':[1,2,3,4,5,6,7,8,9,10],
        'pertanyaan':['Nama zat hijau daun?',
                      'Nama kingdom dari hewan sapi?',
@@ -52,14 +14,7 @@ data= {'index':[1,2,3,4,5,6,7,8,9,10],
 import random
 import math
 
-# def user():
-#     put= input(f'''
-# {'-'*55:^10}
-# |{'Welcome':^53}|
-# {'-'*55}\n
-# Siapa Namamu?''')
-#     print(f'Hai {put}, Harap jawab beberapa pertanyaan di bawah ini.\n Mari kita mulai!')
-
+## User Name
 def user():
     put= input(f'''{'-'*56}
 |{'Welcome to Quezzy':^54}|
@@ -74,48 +29,60 @@ numb=[]
 benar=[]
 salah=[]
 def main():
-    while True:
-        a=0
-        for i in selnum:
-            if i not in numb:
-                a+=1
-                af= input(f"\n{a}. {data['pertanyaan'][i]} ").lower()
-                if af!=data['jawaban'][i]:
-                    salah.append(i)
-                else:
-                    benar.append(i)
-                numb.append(i)
-        break
-    
+    a=0
+    for i in selnum:
+        if i not in numb:
+            a+=1
+            af= input(f"\n{a}. {data['pertanyaan'][i]} ").lower()
+            if af!=data['jawaban'][i]:
+                salah.append(i)
+            else:
+                benar.append(i)
+            numb.append(i)
+
+
+## Result
 def review():
     nilai=int((len(benar)/5)*100)
     print(f"\n{'-'*56}")
     if nilai==100:
         print(f'''|{' ':>20}Nilai Kamu: {nilai}{' ':<19}|
-|{' ':>15}Perfect! Selamat Anda Lulus{' ':<12}|''')
+|{'Perfect! Selamat Anda Lulus':^54}|''')
     elif nilai>=60:
         print(f'''|{' ':>20}Nilai Kamu: {nilai}{' ':<20}|
-|{' ':>18}Selamat Anda lulus{' ':<18}|''')
+|{'Selamat Anda lulus':^54}|''')
     elif nilai>0:
         print(f'''|{' ':>20}Nilai Kamu: {nilai}{' ':<20}|
-|{' ':>8}Maaf Anda belum lulus. Yuk belajar lagi{' ':<7}|''')
+|{'Maaf Anda belum lulus. Yuk belajar lagi':^54}|''')
     elif nilai==0:
         print(f'''|{' ':>21}Nilai Kamu: {nilai}{' ':<20}|
-|{' ':>17}Belajar lagi aja dek!{' ':<16}|''')
+|{'Belajar lagi aja dek!':^54}|''')
     print(f"{'-'*56}")
     
+    
+## Exeption handling for Question
+def question(msg,choice):
+    cho= [i.lower() for i in choice]
+    while True:
+        jwb= input(msg).lower()
+        if jwb in cho:
+            return jwb
+        else:
+            print(f'\nCek kembali jawabanmu! Hanya {choice} yang diperbolehkan!')
 
-
+## Running the Game
 while True:
     user()
     main()
     review()
-    ask= input('Apakah Anda ingin bermain lagi? (Y/N) ').lower()
+    ask= question('Apakah Anda ingin bermain lagi? (Y/N) ',['Y','N'])
     if ask=='n':
-        print('Terima Kasih Sudah Bermain!')
+        print(f'''\n{'-'*56}
+|{'Terima Kasih Sudah Bermain!':^54}|
+{'-'*56}\n''')
         break
     else:
         numb.clear()
         benar.clear()
         salah.clear()
-        print('NEW GAME')
+        print(f'\n=== {'NEW GAME':^47} ===\n')
