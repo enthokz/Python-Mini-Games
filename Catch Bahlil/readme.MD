@@ -4,7 +4,7 @@ This project, who i called 'mini-simply' games it's about catch a stuff we calle
 
 How to Play:
 
-Enter your player name
-There is 4 cave which cave is marked by number in range 1-4. The acceptable answer is integer in range 1-4.
-Confirmation for your answer. Fill 1 if you sure abaout your answer then fill 2 if you doubt and want to change your answer.
-The result will show your answer is correct or not. You able to play it again until you have the correct answer.
+1. Enter your player name
+2. There is 4 cave which cave is marked by number in range 1-4. The acceptable answer is integer in range 1-4.
+3. Confirma your answer. Fill 1 if you sure abaout your answer then fill 2 if you doubt and want to change your answer.
+4. The result will show your answer is correct or not. You able to play it again until you have the correct answer.
