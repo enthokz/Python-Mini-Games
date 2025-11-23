@@ -67,7 +67,6 @@ def user():
 Siapa Namamu? ''')
     print(f'\nHai {put}, Tugas kamu adalah menjaawab pertanyaan berikut dengan tepat.\nMari kita mulaiii!')
 
-
 num= list(range(0,10))
 # random.shuffle(num)
 selnum= random.sample(num,5)
@@ -89,15 +88,34 @@ def main():
         break
     
 def review():
-    print(f'''\n{'-'*56}
-|{' ':>22}Nilai Kamu {int((len(benar)/5)*100)}{' ':<19}|
-{'-'*56}
-Anda berhasil menjawab benar {len(benar)} soal
-Terima kasih sudah bermain!\n''')
+    nilai=int((len(benar)/5)*100)
+    print(f"\n{'-'*56}")
+    if nilai==100:
+        print(f'''|{' ':>20}Nilai Kamu: {nilai}{' ':<19}|
+|{' ':>15}Perfect! Selamat Anda Lulus{' ':<12}|''')
+    elif nilai>=60:
+        print(f'''|{' ':>20}Nilai Kamu: {nilai}{' ':<20}|
+|{' ':>18}Selamat Anda lulus{' ':<18}|''')
+    elif nilai>0:
+        print(f'''|{' ':>20}Nilai Kamu: {nilai}{' ':<20}|
+|{' ':>8}Maaf Anda belum lulus. Yuk belajar lagi{' ':<7}|''')
+    elif nilai==0:
+        print(f'''|{' ':>21}Nilai Kamu: {nilai}{' ':<20}|
+|{' ':>17}Belajar lagi aja dek!{' ':<16}|''')
+    print(f"{'-'*56}")
     
 
-user()
-main()
-review()
 
-
+while True:
+    user()
+    main()
+    review()
+    ask= input('Apakah Anda ingin bermain lagi? (Y/N) ').lower()
+    if ask=='n':
+        print('Terima Kasih Sudah Bermain!')
+        break
+    else:
+        numb.clear()
+        benar.clear()
+        salah.clear()
+        print('NEW GAME')
