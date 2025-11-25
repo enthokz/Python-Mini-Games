@@ -71,18 +71,60 @@ def question(msg,choice):
             print(f'\nCek kembali jawabanmu! Hanya {choice} yang diperbolehkan!')
 
 ## Running the Game
-while True:
-    user()
-    main()
-    review()
-    ask= question('Apakah Anda ingin bermain lagi? (Y/N) ',['Y','N'])
-    if ask=='n':
-        print(f'''\n{'-'*56}
-|{'Terima Kasih Sudah Bermain!':^54}|
-{'-'*56}\n''')
-        break
+# while True:
+#     user()
+#     main()
+#     review()
+#     ask= question('Apakah Anda ingin bermain lagi? (Y/N) ',['Y','N'])
+#     if ask=='n':
+#         print(f'''\n{'-'*56}
+# |{'Terima Kasih Sudah Bermain!':^54}|
+# {'-'*56}\n''')
+#         break
+#     else:
+#         numb.clear()
+#         benar.clear()
+#         salah.clear()
+#         print(f'\n=== {'NEW GAME':^47} ===\n')
+
+
+
+## Trying Design OOP
+class player:
+    def __init__ (self, player):
+        self.player=player
+        self.daftar=[]
+        self.nilai=[]
+    def pemain(self,nama,amount):
+        self.nama=nama
+        self.amount=amount
+        if nama in self.daftar:
+            a= self.daftar.index(self.nama)
+            self.daftar[a]=nama
+            if self.nilai[a]<amount:
+                self.nilai[a]=amount
+        else:
+            self.daftar.append(nama)  
+            self.nilai.append(amount)  
+
+
+user= player('person')
+user.pemain('Dontol',50)
+user.pemain('Fontol',70)
+user.pemain('Afdhol',100)
+user.pemain('Fontol',50)
+
+def cari(siapa):
+    a=[]
+    b=[]
+    for i in user.daftar:
+        if i==siapa:
+            a.append(i)
+            b.append(user.nilai[user.daftar.index(i)])
+    if a==[]:
+        print('Nama tidak ditemukan')
     else:
-        numb.clear()
-        benar.clear()
-        salah.clear()
-        print(f'\n=== {'NEW GAME':^47} ===\n')
+        print(a)
+        print(b)
+        
+cari('Fontol')
