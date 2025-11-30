@@ -1,7 +1,6 @@
 import random
 import math
 import pandas as pd
-
 ## Dict Petanyaan
 data= {'index':[1,2,3,4,5,6,7,8,9,10],
        'pertanyaan':['Nama zat hijau daun?',
@@ -13,8 +12,39 @@ data= {'index':[1,2,3,4,5,6,7,8,9,10],
                      'Nama enzim pengubah karbohidrat menjadi gula?',
                      'Nama bagian tempat pertukaran oksigen dan CO2 di paru-paru?',
                      'Nama penyakit yang diakibatkan oleh Salmonella typhi?',
-                     'Nama zat yang mengakibatkan otot lelah?'],
-       'jawaban':['klorofil','animalia','lidah','trombosit','ligamen','trakea','amilase','alveolus','tipes','asam laktat']}
+                     'Nama zat yang mengakibatkan otot lelah?',
+                     'Nama tulang terpanjang yang dimiliki manusia?',
+                     'Nama Saluran yang menghubungkan mulut dengan lambung?',
+                     'Nama gerakan mendorong makanan dari rongga mulut menuju lambung?',
+                     'Nama bagian yang berfungsi mengatur cahaya yang masuk ke mata?',
+                     'Tingkatan taksonomi makhluk hidup di atas species?',
+                     'Istilah makhluk hidup yang memiliki organ reproduksi ganda?',
+                     'Nama otot yang berfungsi untuk menggerakan tubuh secara sadar adalah otot?',
+                     'Nama kemampuan dari makhluk hidup dalam menyamarkan diri dengan lingkungan sekitar disebut?',
+                     'Simbiosis yang menguntungkan kedua belah pihak adalah?',
+                     'Nama saat kondisi tubuh kekurangan sel darah merah?'],
+       'jawaban':['klorofil','animalia','lidah','trombosit','ligamen',
+                  'trakea','amilase','alveolus','tipes','asam laktat','femur',
+                  'kerongkongan','peristaltik','pupil','genus','hemaprodit','lurik','mimikri',
+                  'mutualisme','anemia']}
+
+## Exeption handling for Question in Game
+def question(msg,choice):
+    cho= [i.lower() for i in choice]
+    while True:
+        jwb= input(msg).lower()
+        if jwb in cho:
+            return jwb
+        else:
+            print(f'\nCek kembali jawabanmu! Hanya {choice} yang diperbolehkan!')
+def question2(msg,choice):
+    while True:
+        jwb= input(msg).lower()
+        if jwb=='' or jwb=='e':
+            return jwb
+        else:
+            print("Silahkan tekan ENTER untuk melanjutkan atau ketik E' untuk keluar")
+
 
 ## Data Pemain
 list_player= []
@@ -34,16 +64,22 @@ def cari():
         try:
             siapa= input(f'''\n===={'CARI CAPAIAN PEMAIN':^47}====
 Siapa nama user yang ingin Anda cari? ''').lower()
+            a=[]
+            b=[]
             for i in list_player:
                 if i==siapa:
-                    a=i
-                    b=list_score[list_player.index(siapa)]
-            print(f"Pemain dengan nama {a} memiliki nilai terbaik {b}")
+                    a.append(siapa)
+                    b.append(list_score[list_player.index(siapa)])
+            if a!=[]:
+                print(f"Pemain dengan nama {a[0]} memiliki nilai terbaik {b[0]}")
+            else:
+                print('Maaf, Nama pemain salah atau belum pernah bermain')
         except:
             print('Maaf, Nama tidak ditemukan')
-        r=question(f'\nApakah anda ingin mencari yang lain? (Y/N) ',['Y','N'])
+        r=question(f'\nApakah anda ingin mencari capaian pemain yang lain? (Y/N) ',['Y','N'])
         if r=='n':
                 break
+
 
 ## Hapus Data
 def hapus():
@@ -52,9 +88,9 @@ Apakah Kamu yakin ingin menghapus capaian user {put}? (Y/N) ''',['Y','N'])
     if d=='y':
         while True:
             try:
-                c=list_player.index(put)
-                n=list_score[c]
-                list_player.remove(list_player[c])
+                b=list_player.index(put)
+                n=list_score[b]
+                list_player.remove(list_player[b])
                 list_score.remove(n)
                 print(f'Data pencapaian player {put} berhasil dihapus! ')
             except:
@@ -75,23 +111,16 @@ Maaf, belum ada data pemain yang tersedia''')
         print(f'''\n===={'LEADERBOARD':^47}====
 {leaderboard.to_string(index=False)}''')
     input(f'\nSilahkan ketik apapun untuk melanjutkan => ')
-    
-
-## Exeption handling for Question
-def question(msg,choice):
-    cho= [i.lower() for i in choice]
-    while True:
-        jwb= input(msg).lower()
-        if jwb in cho:
-            return jwb
-        else:
-            print(f'\nCek kembali jawabanmu! Hanya {choice} yang diperbolehkan!')
+        
 
 ## Greeting
 def greeting():
     print(f'''{'-'*56}
 |{'Welcome to Quezzy':^54}|
 {'-'*56}''')
+    lanjut=question2(f'{'Silahkan Tekan Enter':^54}',['','E'])
+    if lanjut=='e':
+        return 'exit'
 
 ## User Name
 def user():
@@ -105,11 +134,11 @@ def home():
     while True:
         q= question(f'''\n===={'HOME MENU':^47}====
 Pilih Menu di bawah ini:
-A. Mulai Main
+A. Mulai Permainan
 B. Cek Capaian Pemain
 C. Cek Leadarboard
 D. Hapus Capaian User
-E. Keluar 
+E. Keluar
 Jawab => ''',['A','B','C','D','E'])
         if q=='a':
             break
@@ -123,67 +152,88 @@ Jawab => ''',['A','B','C','D','E'])
             hapus()
 
 ## Question
-num= list(range(0,10))
 # random.shuffle(num)
-selnum= random.sample(num,5)
-numb=[]
-benar=[]
-salah=[]
 def main():
+    global numb
+    global benar
+    global salah
+    num= list(range(0,21))
+    selnum= random.sample(num,5)
+    numb=[]
+    benar=[]
+    salah=[]
     print(f'''\n===={'MULAI PERMAINAN':^47}====
-Tugas kamu adalah menjaawab pertanyaan berikut dengan tepat.\nMari kita mulaiii!''')
+Tugas kamu adalah menjawab pertanyaan berikut dengan tepat.\nMari kita mulaiii!''')
     a=0
     for i in selnum:
         if i not in numb:
             a+=1
-            af= input(f"\n{a}. {data['pertanyaan'][i]} ").lower()
-            if af!=data['jawaban'][i]:
-                salah.append(i)
-            else:
-                benar.append(i)
+            while True:
+                af= input(f"\n{a}. {data['pertanyaan'][i]} ").lower()
+                if af=="":
+                    print(f'\nJawaban tidak boleh kosong!')
+                elif af!=data['jawaban'][i]:
+                    salah.append(i)
+                    break
+                else:
+                    benar.append(i)
+                    break
             numb.append(i)
 
 
 ## Result
 def review():
-    nilai=int((len(benar)/5)*100)
+    nilai=int((len(benar)/len(numb))*100)
     print(f"\n{'-'*56}")
     if nilai==100:
         print(f'''|{' ':>20}Nilai Kamu: {nilai}{' ':<19}|
-|{'Perfect! Selamat Anda Lulus':^54}|''')
+|{'Perfect! Nilai Kamu Sempurna!':^54}|''')
     elif nilai>=60:
         print(f'''|{' ':>20}Nilai Kamu: {nilai}{' ':<20}|
-|{'Selamat Anda lulus':^54}|''')
+|{'Hebat! Kamu hampir memjawab semua dengan benar':^54}|''')
     elif nilai>0:
         print(f'''|{' ':>20}Nilai Kamu: {nilai}{' ':<20}|
-|{'Maaf Anda belum lulus. Yuk belajar lagi':^54}|''')
+|{'Maaf Nilai mu rendah. Belajar lagi ya':^54}|''')
     elif nilai==0:
         print(f'''|{' ':>21}Nilai Kamu: {nilai}{' ':<20}|
 |{'Belajar lagi aja dek!':^54}|''')
     print(f"{'-'*56}")
     pemain(put,nilai)
     
-
-## Running the Game
-greeting()
-user()
-while True:
-    gmn=home()
-    if gmn=='exit':
-        print(f'''\n{'-'*56}
+##  End Greeting
+def endgreet():
+    print(f'''\n{'-'*56}
 |{'Terima Kasih Sudah Bermain!':^54}|
 {'-'*56}\n''')
-        break
-    main()
-    review()
-    ask= question('Apakah Anda ingin bermain lagi? (Y/N) ',['Y','N'])
+    
+## Newgame Offer
+def newgame():
+    ask= question('Apakah Anda ingin kembali ke Home Menu? (Y/N) ',['Y','N'])
     if ask=='n':
-        print(f'''\n{'-'*56}
-|{'Terima Kasih Sudah Bermain!':^54}|
-{'-'*56}\n''')
-        break
+        endgreet()
+        numb.clear()
+        benar.clear()
+        salah.clear()
+        return ask
     else:
         numb.clear()
         benar.clear()
         salah.clear()
-        print(f'\n=== {'NEW GAME':^47} ===\n')
+
+
+## Running the Game
+while True:
+    g=greeting()
+    if g=='exit':
+        break
+    user()
+    while True:
+        gmn=home()
+        if gmn=='exit':
+            endgreet()
+            break
+        main()
+        review()
+        n= newgame()
+        if n=='n':
+            break
