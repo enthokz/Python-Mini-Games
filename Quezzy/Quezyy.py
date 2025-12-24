@@ -64,8 +64,8 @@ def greeting():
     input_nama.pack(pady=5, side='bottom')
     input_nama.focus_set()
 
-    tombol= tk.Button(main, text='Mulai', command=home, bg="#A8B1B8",
-              foreground="#000000", state='disabled')
+    tombol= tk.Button(main, text='Mulai', command=home, bg="#4CAEFA",
+              font=('Comic Sans', 9, 'bold'), foreground="#000000", state='disabled')
     tombol.place(relx=0.45, rely=0.70, width=75)
     
 
@@ -90,7 +90,7 @@ def home():
     tk.Label(main, text='Home Page',
              font=('Oswald',30, 'bold'),
              foreground='#FFFFFF',bg="#34495A",
-             justify='center',anchor='w').place(relx=0.23, rely=0.15,height=50,width=300)
+             justify='center',anchor='w').place(relx=0.25, rely=0.15,height=50,width=300)
     tk.Label(main, text='Silahkan Pilih Menu Berikut')
     
     global x
@@ -101,26 +101,63 @@ def home():
     for i in range(len(pilihan)):
         radio = tk.Radiobutton(frame2, text=pilihan[i], 
                                variable=x, value=i, width=70,
-                               command=hasil,indicatoron=0,offrelief='flat')
-        radio.pack()
+                               command=hasil,indicatoron=0,offrelief='flat',overrelief='sunken',
+                               border=100, borderwidth=3)
+        radio.pack(padx=10,pady=3)
 
 
 ## Permainan
-data= {'index':[1,2,3,4,5,6,7,8,9,10],
-       'pertanyaan':['Nama zat hijau daun?sdabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'],
-       'jawaban':['klorofil']}
-
-def next():
+data= {'index':[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+       'pertanyaan':['Nama zat hijau daun?',
+                     'Nama kingdom dari hewan sapi?',
+                     'Nama indera perasaa adalah?',
+                     'Nama fragmen darah yang berfungsi untuk membekukan darah?',
+                     'Nama bagian tubuh yang menyambungkan antara tulang dan tulang?',
+                     'Nama alat pernapasan serangga?',
+                     'Nama enzim pengubah karbohidrat menjadi gula?',
+                     'Nama bagian tempat pertukaran oksigen dan CO2 di paru-paru?',
+                     'Nama penyakit yang diakibatkan oleh Salmonella typhi?',
+                     'Nama zat yang mengakibatkan otot lelah?',
+                     'Nama tulang terpanjang yang dimiliki manusia?',
+                     'Nama Saluran yang menghubungkan mulut dengan lambung?',
+                     'Nama gerakan mendorong makanan dari rongga mulut menuju lambung?',
+                     'Nama bagian yang berfungsi mengatur cahaya yang masuk ke mata?',
+                     'Tingkatan taksonomi makhluk hidup di atas species?',
+                     'Istilah makhluk hidup yang memiliki organ reproduksi ganda?',
+                     'Nama otot yang berfungsi untuk menggerakan tubuh secara sadar adalah otot?',
+                     'Nama kemampuan dari makhluk hidup dalam menyamarkan diri dengan lingkungan sekitar disebut?',
+                     'Simbiosis yang menguntungkan kedua belah pihak adalah?',
+                     'Nama saat kondisi tubuh kekurangan sel darah merah?'],
+       'jawaban':['klorofil','animalia','lidah','trombosit','ligamen',
+                  'trakea','amilase','alveolus','tipes','asam laktat','femur',
+                  'kerongkongan','peristaltik','pupil','genus','hemaprodit','lurik','mimikri',
+                  'mutualisme','anemia']}
+benar=[]
+salah=[]
+def aksi_tombol_next():
     global indek
+    jawaban_user= entry_jawaban.get()
+    if jawaban_user==list_kunci[indek]:
+        benar.append(jawaban_user)
+    else:
+        salah.append(jawaban_user)
+    print(benar)
     indek+=1
-    next_question= list_tanya[indek]
-    label_tanya.config(text=next_question)
-    entry_jawaban.delete(0, tk.END)
-    entry_jawaban.focus_set()
+    if indek>=len(list_tanya):
+        indek=0
+        random_num.clear()
+        ending()
+    else:
+        next_question= list_tanya[indek]
+        label_tanya.config(text=next_question)
+        entry_jawaban.delete(0, tk.END)
+        entry_jawaban.focus_set()
 
 
 def ingame():
     global list_tanya
+    global list_kunci
+    global random_num
     global indek
     global tombol_next
     global entry_jawaban
@@ -128,8 +165,8 @@ def ingame():
     for frame in main.winfo_children():
             frame.destroy()
 
-    num=list(range(0,1))
-    random_num= random.sample(num,1)
+    num=list(range(0,20))
+    random_num= random.sample(num,5)
     list_tanya=[]
     list_kunci=[]
     for i in random_num:
@@ -139,21 +176,40 @@ def ingame():
     frame3= tk.Frame(main)
     frame3.pack(padx=10, pady=10, fill='x', expand=True)
     indek=0
-    label_tanya= tk.Label(frame3, text=list_tanya[indek])
+    label_tanya= tk.Label(frame3, text=list_tanya[indek], wraplength=450)
     label_tanya.pack(padx=10, pady=10, fill='x')
     entry_jawaban= tk.Entry(frame3, justify='center')
     entry_jawaban.pack(padx=10, pady=10, fill='x')
     entry_jawaban.focus_set()
-    tombol_next= tk.Button(frame3, text='Next',command=next)
+    tombol_next= tk.Button(frame3, text='Next',command=aksi_tombol_next)
     tombol_next.pack(padx=10, pady=10, fill='x')
 
 
-    print(random_num)
+## Akhir permainan
+
+def aksi_tombol_home():
+    benar.clear()
+    salah.clear()
+    home()
+
+def ending():
+    global tombol_home
+    for frame in main.winfo_children():
+            frame.destroy()
+    
+    frame4= tk.Frame(main)
+    frame4.pack(padx=10, pady=10, fill='x', expand=True)
+
+    nilai_user= int((len(benar)/len(list_tanya))*100)
+    Label(frame4, text=f'Selamat! nilai kamu : {nilai_user}').pack()
+    tombol_home= tk.Button(frame4, text='Kembali ke Home Menu', command=aksi_tombol_home)
+    tombol_home.pack()
 
 greeting()
 
 
 main.mainloop()
+
 # import random
 # import math
 # import pandas as pd
