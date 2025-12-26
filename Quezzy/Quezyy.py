@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
-# from tkinter.messagebox import showinfo
+from tkinter import messagebox
+from tkinter.messagebox import showinfo
 # from tkinter import PhotoImage
 # from tkinter import ttk
 # from tkinter import IntVar
@@ -16,13 +17,25 @@ def pemain(nama,amount):
     # global a
     if nama in list_player:
         a= list_player.index(nama)
-        if list_score[a]< amount:
-            list_score[a]=amount
+        try:
+            if list_score[a]< amount:
+                list_score[a]=amount
+        except IndexError:
+            list_score.insert(a,amount)
     else:
-        list_player.append(nama)
-        list_score.append(amount)
+        list_player.insert(0,nama)
+        list_score.insert(0, amount)
 
 
+## Buat Jendela 
+main= tk.Tk()
+# Window
+main.configure(bg="#3E4784")
+main.geometry('500x300')
+main.resizable(False,False)
+main.title('Quezzy : Quiz being Dizzy')
+
+## First Page
 def tracking(*args):
     x= player_name.get()
     if x:
@@ -30,58 +43,134 @@ def tracking(*args):
     else:
         tombol.config(state='disabled')
 
-## Buat Jendela 
-main= tk.Tk()
-# Window
-main.configure(bg="#34495A")
-main.geometry('500x300')
-main.resizable(False,False)
-main.title('Quezzy : Quiz being Dizzy')
-
-## First Page
 def greeting():
     global player_name
     global gambar1
     global tombol
-    global frame1
-    frame1= tk.Frame(main, bg="#6B7883")
-    frame1.place(x=110, y=140,height=50,width=300)
+    global input_nama
+    # global frame1
+    frame1= tk.Frame(main, bg="#3E4784")
+    frame1.place(x=70, y=140,height=60,width=360)
     
     gambar1= PhotoImage(file=r'C:\Users\Fahrul\Documents\python\tkinter_GUI\letterq2.png')
     player_name= tk.StringVar()
     player_name.trace('w',tracking)
+    # player_name= nama.get()
     teks1= 'Welcome to Quizzy'
-    teks2= 'Please Enter Your Player Name Below'
+    teks2= 'Nama Player'
 #     tk.Label(main,image=gambar1,compound='left').place(relheight=1, x=0)
 
     tk.Label(main,text=teks1, font=('Comic Sans',15,'bold'),foreground='#FFFFFF',
-              anchor='e',background='#34495A',padx=10,
-              image=gambar1,compound='left').place(relx=0.5,rely=0.25,anchor='center')
-    ttk.Label(frame1,text=teks2,font=('Poppins',10),foreground='#FFFFFF',
-              background="#6B7883",anchor='center').pack()
+              anchor='e',background='#3E4784',padx=10,
+              image=gambar1,compound='left').place(relx=0.49,rely=0.30,anchor='center')
+    ttk.Label(frame1,text=teks2,font=('Oswald',9, 'bold'),foreground='#FFFFFF',
+              background="#3E4784", justify='left').pack(anchor='w',padx=70)
     
-    input_nama= tk.Entry(frame1,textvariable=player_name,bg="#F3F3F3",justify='center')
-    input_nama.pack(pady=5, side='bottom')
+    input_nama= tk.Entry(frame1,textvariable=player_name,font=('Tahoma',9,'bold'),
+                         bg="#F3F3F3",justify='center',width=27)
+    input_nama.pack(pady=6, side='bottom',ipady=10)
     input_nama.focus_set()
+    # input_nama.insert(0,'Nama Player')
 
-    tombol= tk.Button(main, text='Mulai', command=home, bg="#4CAEFA",
-              font=('Comic Sans', 9, 'bold'), foreground="#000000", state='disabled')
-    tombol.place(relx=0.45, rely=0.70, width=75)
-    
+    tombol= tk.Button(main, text='Masuk', command=home, bg="#5199f8",
+              font=('Comic Sans', 9, 'bold'), disabledforeground="#C0BFBF",foreground='black', 
+              state='disabled',relief='raised')
+    tombol.place(relx=0.43, rely=0.70, width=75)
+def player_status():
+    try:
+        cek=list_score[list_player.index(player_name.get())]
+    except:
+        cek='-'
+    teks= f'Player Info\nName        : {player_name.get()}\nBest Score : {cek}'
+    Label(main,text=teks, font=('Roboto',7),justify='left',
+          foreground="#1580D8",background='#FFFFFF').place(relx=0,rely=0)
 
 
 ## Homepage
 def hasil():
     if (x.get()==0):
-        print(f'Your are Konohagakure Shinobi! ')
         ingame()
     elif (x.get()==1):
-        print(f'Your are kirigakure Shinobi! ')
+        # print(f'Your are {player_name.get()} ')
+        aksi_menu2()
     elif (x.get()==2):
-        print(f'Your are not just Shinobi, You are the Nabi!')
+        aksi_menu3()
+    elif(x.get()==3):
+        aksi_menu4()
+def aksi_menu2():
+    for frame in main.winfo_children():
+        frame.destroy()
+
+    frame5=Frame(main)
+    frame5.place()
+    dict={'nama': list_player,
+          'nilai': list_score}
+    df= pd.DataFrame(dict)
+    df=df.sort_values('nilai', ascending=False)
+    d= df.iloc[:3, 0].to_list()
+    top=[]
+    for i in d:
+        top.append(i)
+    
+    Label(main, text='Top Rank Quizzy', font=('Oswald', 16,'bold')).place(relx=0.45, rely=0.2)
+
+    panjang= len(top)
+    besar= [10,8,8]
+    indek=0
+    if top==[]:
+        Label(main, text='Belum ada capaian apapun.\nJadilah yang  pertama memainkan Quizzy!').place(relx=0.2, rely=0.5)
+    for i in top:
+        if indek<panjang:
+            Label(main, text=top[indek], font=('Comic Sans', besar[indek], 'bold')).pack(padx=10, pady=10)
+            indek+=1
+        else:
+            indek=0
+
+    # if len(top)==0:
+    #     Label(main, text='Belum ada capaian apapun.\nJadilah yang  pertama memainkan Quizzy!').place(relx=0.2, rely=0.5)
+    # elif len(top)==1:
+    #     Label(main, text=top[0], font=('Comic Sans', 10, 'bold')).place(relx=0.2, rely=0.5)
+    # else:
+    #     Label(main, text=top[0], font=('Comic Sans', 10, 'bold')).place(relx=0.2, rely=0.5)
+    #     Label(main, text=f'{top[1]}\n{top[2]}').place(relx=0.2, rely=0.6)
+    Button(main, text='Back to Home Menu', command=home).place(relx=0.2, rely=0.7)
+def aksi_menu3():
+    msg=f'Langkah ini akan melakukan:\n  o Hapus capaian\n  o Hapus player jika tidak bermain selepas ini\nApakah kamu yakin ingin melakukannya?'
+    tanya= messagebox.askyesnocancel(title='Hapus Capaian',
+                                     message=msg)
+    if tanya:
+        try:
+            try:
+                del list_score[list_player.index(player_name.get())]
+                del list_player[list_player.index(player_name.get())]
+                showinfo(title='Hapus Capaian', message='Berhasil hapus capaian player!')
+                home()
+            except IndexError:
+                showinfo(title='Hapus Capaian', message='Tidak capain dari pemain')
+        except ValueError:
+            showinfo(title='Hapus Capaian', message='Tidak capain dari pemain')
+    else:
+        print('TIdak')
+def aksi_menu4():
+    for frame in main.winfo_children():
+            frame.destroy()
+    greeting()
+    # for frame in main.winfo_children():
+    #     frame.destroy()
+    
+    # Label(main, text='Your Best Achievement', font=('Open Sans',16,'bold',),
+    #       foreground="#36B0F7").place(relx=0.2, rely=0.15,height=50,width=300)
+    # try:
+    #     if player_name.get() in list_player:
+    #         print(player_name.get())
+    #         print(list_score[list_player.index(player_name.get())])
+    #     else:
+    #         print('Player belum memiliki pencapaian')
+    # except IndexError:
+    #     print('Eror. Kontak dev')
+    # Button(main, text='Kembali ke Home Menu', command=home).place(relx=0.3, rely=0.8)
+    
 def home():
-    data= player_name.get()
-    pemain(data,data)
     for frame in main.winfo_children():
         frame.destroy()
 
@@ -90,13 +179,12 @@ def home():
     tk.Label(main, text='Home Page',
              font=('Oswald',30, 'bold'),
              foreground='#FFFFFF',bg="#34495A",
-             justify='center',anchor='w').place(relx=0.25, rely=0.15,height=50,width=300)
-    tk.Label(main, text='Silahkan Pilih Menu Berikut')
+             justify='center',anchor='w').place(relx=0.3, rely=0.15,height=50,width=300)
     
     global x
     x= IntVar()
     x.set(None)
-    pilihan=['Start','User Achievment','Leaderboard','Delete User Achievment','Exit']
+    pilihan=['Start','Leaderboard','Reset Achievement','Exit']
     
     for i in range(len(pilihan)):
         radio = tk.Radiobutton(frame2, text=pilihan[i], 
@@ -104,7 +192,7 @@ def home():
                                command=hasil,indicatoron=0,offrelief='flat',overrelief='sunken',
                                border=100, borderwidth=3)
         radio.pack(padx=10,pady=3)
-
+    player_status()
 
 ## Permainan
 data= {'index':[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
@@ -190,6 +278,8 @@ def ingame():
 def aksi_tombol_home():
     benar.clear()
     salah.clear()
+    print(list_player)
+    print(list_score)
     home()
 
 def ending():
@@ -202,6 +292,8 @@ def ending():
 
     nilai_user= int((len(benar)/len(list_tanya))*100)
     Label(frame4, text=f'Selamat! nilai kamu : {nilai_user}').pack()
+    pemain(player_name.get(),nilai_user)
+
     tombol_home= tk.Button(frame4, text='Kembali ke Home Menu', command=aksi_tombol_home)
     tombol_home.pack()
 
