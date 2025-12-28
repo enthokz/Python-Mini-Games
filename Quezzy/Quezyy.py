@@ -8,6 +8,8 @@ from tkinter.messagebox import showinfo
 # from tkinter import IntVar
 import pandas as pd
 import random
+from functools import partial
+
 
 
 ## Data Pemain
@@ -30,26 +32,27 @@ def pemain(nama,amount):
 ## Buat Jendela 
 main= tk.Tk()
 # Window
-main.configure(bg="#3E4784")
+main.configure(bg="#edf2f4")
 main.geometry('500x300')
 main.resizable(False,False)
-main.title('Quezzy : Quiz being Dizzy')
+main.title('Quizzy : Quiz of Biology')
 
 ## First Page
 def tracking(*args):
     x= player_name.get()
     if x:
-        tombol.config(state='normal')
+        tombol_masuk.config(state='normal')
     else:
-        tombol.config(state='disabled')
+        tombol_masuk.config(state='disabled')
 
 def greeting():
     global player_name
     global gambar1
-    global tombol
+    global tombol_masuk
     global input_nama
+
     # global frame1
-    frame1= tk.Frame(main, bg="#3E4784")
+    frame1= tk.Frame(main, bg="#edf2f4")
     frame1.place(x=70, y=140,height=60,width=360)
     
     gambar1= PhotoImage(file=r'C:\Users\Fahrul\Documents\python\tkinter_GUI\letterq2.png')
@@ -60,11 +63,11 @@ def greeting():
     teks2= 'Nama Player'
 #     tk.Label(main,image=gambar1,compound='left').place(relheight=1, x=0)
 
-    tk.Label(main,text=teks1, font=('Comic Sans',15,'bold'),foreground='#FFFFFF',
-              anchor='e',background='#3E4784',padx=10,
+    tk.Label(main,text=teks1, font=('Comic Sans',15,'bold'),foreground='#3E4784',
+              anchor='e',background='#edf2f4',padx=10,
               image=gambar1,compound='left').place(relx=0.49,rely=0.30,anchor='center')
-    ttk.Label(frame1,text=teks2,font=('Oswald',9, 'bold'),foreground='#FFFFFF',
-              background="#3E4784", justify='left').pack(anchor='w',padx=70)
+    ttk.Label(frame1,text=teks2,font=('Oswald',9, 'bold'),foreground='#D82149',
+              background="#edf2f4", justify='left').pack(anchor='w',padx=70)
     
     input_nama= tk.Entry(frame1,textvariable=player_name,font=('Tahoma',9,'bold'),
                          bg="#F3F3F3",justify='center',width=27)
@@ -72,31 +75,41 @@ def greeting():
     input_nama.focus_set()
     # input_nama.insert(0,'Nama Player')
 
-    tombol= tk.Button(main, text='Masuk', command=home, bg="#5199f8",
-              font=('Comic Sans', 9, 'bold'), disabledforeground="#C0BFBF",foreground='black', 
+    tombol_masuk= tk.Button(main, text='Masuk', command=home, bg="#293241",
+              font=('Comic Sans', 9, 'bold'), disabledforeground="#9E9B9B",foreground="#FFFFFF", 
               state='disabled',relief='raised')
-    tombol.place(relx=0.43, rely=0.70, width=75)
-def player_status():
+    tombol_masuk.place(relx=0.43, rely=0.70, width=75)
+
+def player_info():
+    global gambar2
+    gambar2= PhotoImage(file=r'C:\Users\Fahrul\Documents\python\tkinter_GUI\user.png')
+    frame6= Frame(main,bg='#F3F3F3', border=0.5)
+    frame6.place(relx=0,rely=0, height=40,width=130)
+
     try:
         cek=list_score[list_player.index(player_name.get())]
     except:
         cek='-'
-    teks= f'Player Info\nName        : {player_name.get()}\nBest Score : {cek}'
-    Label(main,text=teks, font=('Roboto',7),justify='left',
-          foreground="#1580D8",background='#FFFFFF').place(relx=0,rely=0)
+    # teks= f'Player Info\nName        : {player_name.get()}\nBest Score : {cek}'
+    Label(frame6,image=gambar2, compound='left').place(relx=0.08 ,rely=0.2)
+    Label(frame6,text=f'{player_name.get()}', font=('tahoma',9,'bold'),justify='left',
+          foreground="#D82149",bg='#F3F3F3').place(relx=0.25, rely=0.05)
+    Label(frame6,text=f'Best score : {cek}', font=('tahoma',7),justify='left',
+          foreground="#D82149", bg='#F3F3F3').place(relx=0.25, rely=0.5)
 
 
 ## Homepage
-def hasil():
-    if (x.get()==0):
+def aksi_home():
+    if (pilihan.get()==0):
         ingame()
-    elif (x.get()==1):
+    elif (pilihan.get()==1):
         # print(f'Your are {player_name.get()} ')
         aksi_menu2()
-    elif (x.get()==2):
+    elif (pilihan.get()==2):
         aksi_menu3()
-    elif(x.get()==3):
+    elif(pilihan.get()==3):
         aksi_menu4()
+
 def aksi_menu2():
     for frame in main.winfo_children():
         frame.destroy()
@@ -151,6 +164,7 @@ def aksi_menu3():
             showinfo(title='Hapus Capaian', message='Tidak capain dari pemain')
     else:
         print('TIdak')
+    home()
 def aksi_menu4():
     for frame in main.winfo_children():
             frame.destroy()
@@ -169,30 +183,40 @@ def aksi_menu4():
     # except IndexError:
     #     print('Eror. Kontak dev')
     # Button(main, text='Kembali ke Home Menu', command=home).place(relx=0.3, rely=0.8)
-    
+def on_enter(event, radio_button, hc):
+    radio_button.config(bg=hc, fg='#D82149')
+def on_leave(event,radio_button,lc):
+    radio_button.config(bg=lc, fg='white')
+
+
 def home():
     for frame in main.winfo_children():
         frame.destroy()
 
-    frame2= tk.Frame(main, bg="#34495A")
-    frame2.place(relx=0.22, rely=0.42,height=200,width=300)
-    tk.Label(main, text='Home Page',
+    frame2= tk.Frame(main, bg="#edf2f4")
+    frame2.place(relx=0.23, rely=0.38,height=160,width=270)
+    tk.Label(main, text='Beranda',
              font=('Oswald',30, 'bold'),
-             foreground='#FFFFFF',bg="#34495A",
-             justify='center',anchor='w').place(relx=0.3, rely=0.15,height=50,width=300)
+             foreground='#ee6c4d',bg="#edf2f4",
+             justify='center',anchor='w').place(relx=0.34, rely=0.17,height=50,width=300)
     
-    global x
-    x= IntVar()
-    x.set(None)
-    pilihan=['Start','Leaderboard','Reset Achievement','Exit']
+    global pilihan
+    global radio
+    pilihan= IntVar()
+    pilihan.set(None)
+    menu=['Start','Klasemen','Reset Pencapaian','Keluar']
     
-    for i in range(len(pilihan)):
-        radio = tk.Radiobutton(frame2, text=pilihan[i], 
-                               variable=x, value=i, width=70,
-                               command=hasil,indicatoron=0,offrelief='flat',overrelief='sunken',
-                               border=100, borderwidth=3)
+    for i in range(len(menu)):
+        radio = tk.Radiobutton(frame2, text=menu[i], 
+                               variable=pilihan, value=i,width=240, font=('Oswald',13),
+                               command=aksi_home,indicatoron=0,offrelief='flat',overrelief='sunken',
+                               border=100, borderwidth=3,
+                               justify='center',bg='#2b2d42',fg='#FFFFFF',
+                               activeforeground="#c54a2b", activebackground="#E6E3E3",selectcolor='#E6E3E3')
         radio.pack(padx=10,pady=3)
-    player_status()
+        radio.bind("<Enter>", lambda event, button=radio, color='#FFFFFF': on_enter(event,button,color))
+        radio.bind("<Leave>", lambda event, button=radio, color='#2b2d42': on_leave(event,button,color))
+    player_info()
 
 ## Permainan
 data= {'index':[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
