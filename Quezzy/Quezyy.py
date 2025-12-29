@@ -8,8 +8,6 @@ from tkinter.messagebox import showinfo
 # from tkinter import IntVar
 import pandas as pd
 import random
-from functools import partial
-
 
 
 ## Data Pemain
@@ -38,6 +36,7 @@ main.resizable(False,False)
 main.title('Quizzy : Quiz of Biology')
 
 ## First Page
+
 def tracking(*args):
     x= player_name.get()
     if x:
@@ -73,7 +72,6 @@ def greeting():
                          bg="#F3F3F3",justify='center',width=27)
     input_nama.pack(pady=6, side='bottom',ipady=10)
     input_nama.focus_set()
-    # input_nama.insert(0,'Nama Player')
 
     tombol_masuk= tk.Button(main, text='Masuk', command=home, bg="#293241",
               font=('Comic Sans', 9, 'bold'), disabledforeground="#9E9B9B",foreground="#FFFFFF", 
@@ -99,6 +97,7 @@ def player_info():
 
 
 ## Homepage
+
 def aksi_home():
     if (pilihan.get()==0):
         ingame()
@@ -113,7 +112,9 @@ def aksi_home():
 def aksi_menu2():
     for frame in main.winfo_children():
         frame.destroy()
-
+    
+    global gambar3
+    gambar3= PhotoImage(file=r'C:\Users\Fahrul\Documents\python\tkinter_GUI\sad-square-svgrepo-com (1).png')
     frame5=Frame(main)
     frame5.place()
     dict={'nama': list_player,
@@ -125,31 +126,41 @@ def aksi_menu2():
     for i in d:
         top.append(i)
     
-    Label(main, text='Top Rank Quizzy', font=('Oswald', 16,'bold')).place(relx=0.45, rely=0.2)
+    Label(main, text='Top Rank Quizzy', font=('Oswald', 28,'bold'),
+          foreground='#3E4784', bg='#edf2f4').place(relx=0.2, rely=0.06)
+
+    global gambar4
+    gambar4= PhotoImage(file=r'C:\Users\Fahrul\Documents\python\tkinter_GUI\pngkey.com-tachanka-png-8227726 (1).png')
+    global gambar5
+    gambar5= PhotoImage(file=r'C:\Users\Fahrul\Documents\python\tkinter_GUI\second-rank.png')
+    global gambar6
+    gambar6= PhotoImage(file=r'C:\Users\Fahrul\Documents\python\tkinter_GUI\third-rank (1).png')
 
     panjang= len(top)
-    besar= [10,8,8]
+    besar= [22,16,16]
+    pad=[0.35, 0.56, 0.69]
+    # pad=[50,3,3]
+    gambar=[gambar4,gambar5,gambar6]
     indek=0
     if top==[]:
-        Label(main, text='Belum ada capaian apapun.\nJadilah yang  pertama memainkan Quizzy!').place(relx=0.2, rely=0.5)
+        Label(main, text='Belum ada capaian apapun.\nJadilah yang  pertama memainkan Quizzy!',
+              font=('Oswald', 11, 'bold'), image=gambar3, compound='top', bg='#edf2f4').place(relx=0.22, rely=0.35)
     for i in top:
         if indek<panjang:
-            Label(main, text=top[indek], font=('Comic Sans', besar[indek], 'bold')).pack(padx=10, pady=10)
+            Label(main, text=top[indek], font=('Comic Sans', besar[indek], 'bold'),
+                  justify='center',anchor='center',foreground='#D82149',background='#edf2f4',
+                  image=gambar[indek], compound='left',padx=10).place(relx=0.5, rely=pad[indek], anchor='center')
             indek+=1
         else:
             indek=0
 
-    # if len(top)==0:
-    #     Label(main, text='Belum ada capaian apapun.\nJadilah yang  pertama memainkan Quizzy!').place(relx=0.2, rely=0.5)
-    # elif len(top)==1:
-    #     Label(main, text=top[0], font=('Comic Sans', 10, 'bold')).place(relx=0.2, rely=0.5)
-    # else:
-    #     Label(main, text=top[0], font=('Comic Sans', 10, 'bold')).place(relx=0.2, rely=0.5)
-    #     Label(main, text=f'{top[1]}\n{top[2]}').place(relx=0.2, rely=0.6)
-    Button(main, text='Back to Home Menu', command=home).place(relx=0.2, rely=0.7)
+    Button(main, text='Kembali ke Beranda', command=home,bg="#293241",
+              font=('Comic Sans', 9, 'bold'),foreground="#FFFFFF", 
+              relief='raised').place(relx=0.39, rely=0.85)
+    
 def aksi_menu3():
-    msg=f'Langkah ini akan melakukan:\n  o Hapus capaian\n  o Hapus player jika tidak bermain selepas ini\nApakah kamu yakin ingin melakukannya?'
-    tanya= messagebox.askyesnocancel(title='Hapus Capaian',
+    msg=f'Langkah ini akan melakukan:\n  o Hapus capaian pemain.\n  o Hapus player jika tidak bermain selepas ini.\nApakah kamu yakin ingin melakukannya?'
+    tanya= messagebox.askyesno(title='Hapus Capaian',
                                      message=msg)
     if tanya:
         try:
@@ -159,30 +170,18 @@ def aksi_menu3():
                 showinfo(title='Hapus Capaian', message='Berhasil hapus capaian player!')
                 home()
             except IndexError:
-                showinfo(title='Hapus Capaian', message='Tidak capain dari pemain')
+                showinfo(title='Hapus Capaian', message='Tidak capaian dari pemain')
         except ValueError:
-            showinfo(title='Hapus Capaian', message='Tidak capain dari pemain')
-    else:
-        print('TIdak')
+            showinfo(title='Hapus Capaian', message='Tidak capaian dari pemain')
+    # else:
+    #     print('TIdak')
     home()
+
 def aksi_menu4():
     for frame in main.winfo_children():
             frame.destroy()
     greeting()
-    # for frame in main.winfo_children():
-    #     frame.destroy()
-    
-    # Label(main, text='Your Best Achievement', font=('Open Sans',16,'bold',),
-    #       foreground="#36B0F7").place(relx=0.2, rely=0.15,height=50,width=300)
-    # try:
-    #     if player_name.get() in list_player:
-    #         print(player_name.get())
-    #         print(list_score[list_player.index(player_name.get())])
-    #     else:
-    #         print('Player belum memiliki pencapaian')
-    # except IndexError:
-    #     print('Eror. Kontak dev')
-    # Button(main, text='Kembali ke Home Menu', command=home).place(relx=0.3, rely=0.8)
+   
 def on_enter(event, radio_button, hc):
     radio_button.config(bg=hc, fg='#D82149')
 def on_leave(event,radio_button,lc):
@@ -219,6 +218,7 @@ def home():
     player_info()
 
 ## Permainan
+
 data= {'index':[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
        'pertanyaan':['Nama zat hijau daun?',
                      'Nama kingdom dari hewan sapi?',
@@ -248,25 +248,30 @@ benar=[]
 salah=[]
 def aksi_tombol_next():
     global indek
-    jawaban_user= entry_jawaban.get()
+    jawaban_user= entry_jawaban.get().lower()
     if jawaban_user==list_kunci[indek]:
         benar.append(jawaban_user)
     else:
         salah.append(jawaban_user)
-    print(benar)
+    # print(benar)
     indek+=1
     if indek>=len(list_tanya):
         indek=0
         random_num.clear()
+        
         ending()
     else:
+        # color=[None,'#F3F3F3'f,'#D82149','#F3F3F3','#D82149']
+        # frame3.configure(bg=color[indek])
         next_question= list_tanya[indek]
         label_tanya.config(text=next_question)
         entry_jawaban.delete(0, tk.END)
         entry_jawaban.focus_set()
-
+def delete():
+    entry_jawaban.delete(0,END)
 
 def ingame():
+    global frame3
     global list_tanya
     global list_kunci
     global random_num
@@ -285,16 +290,27 @@ def ingame():
         list_tanya.append(data['pertanyaan'][i])
         list_kunci.append(data['jawaban'][i])
 
-    frame3= tk.Frame(main)
+    frame3= tk.Frame(main, bg='#F3F3F3')
     frame3.pack(padx=10, pady=10, fill='x', expand=True)
     indek=0
-    label_tanya= tk.Label(frame3, text=list_tanya[indek], wraplength=450)
-    label_tanya.pack(padx=10, pady=10, fill='x')
-    entry_jawaban= tk.Entry(frame3, justify='center')
-    entry_jawaban.pack(padx=10, pady=10, fill='x')
+
+    label_tanya= tk.Label(frame3, text=list_tanya[indek], wraplength=450,
+                          background='#F3F3F3', foreground='#D82149', font=('Tahoma',13))
+    label_tanya.pack(padx=10, pady=30, fill='x')
+
+    entry_jawaban= tk.Entry(frame3, justify='center', font=('Tahoma',10), background="#FAFAFA")
+    entry_jawaban.pack(padx=10, pady=10, fill='x', ipady=4)
     entry_jawaban.focus_set()
-    tombol_next= tk.Button(frame3, text='Next',command=aksi_tombol_next)
+
+    tombol_next= tk.Button(frame3, text='Next',command=aksi_tombol_next,
+                           background='#293241', font=('Comic Sans',9, 'bold'),
+                           foreground='#FFFFFF')
     tombol_next.pack(padx=10, pady=10, fill='x')
+
+    delete_button= Button(frame3,text='Delete', command=delete,
+                          background="#93969B", font=('Comic Sans',9, 'bold'),
+                          foreground='#FFFFFF')
+    delete_button.pack(padx=10, pady=1,fill='x')
 
 
 ## Akhir permainan
@@ -302,266 +318,47 @@ def ingame():
 def aksi_tombol_home():
     benar.clear()
     salah.clear()
-    print(list_player)
-    print(list_score)
+    list_tanya.clear()
+    list_kunci.clear()
     home()
+
+def aksi_tombol_exit():
+    benar.clear()
+    salah.clear()
+    list_tanya.clear()
+    list_kunci.clear()
+    for frame in main.winfo_children():
+            frame.destroy()
+    greeting()
 
 def ending():
     global tombol_home
+    global gambar7
+    gambar7= PhotoImage(file=r'C:\Users\Fahrul\Documents\python\tkinter_GUI\achievement-challenge-medal-svgrepo-com (1).png')
     for frame in main.winfo_children():
             frame.destroy()
     
-    frame4= tk.Frame(main)
-    frame4.pack(padx=10, pady=10, fill='x', expand=True)
-
+    frame4= tk.Frame(main, bg='#edf2f4')
+    frame4.place(relx=0.31, rely=0.2)
     nilai_user= int((len(benar)/len(list_tanya))*100)
-    Label(frame4, text=f'Selamat! nilai kamu : {nilai_user}').pack()
+    
+    Label(frame4, text=f'Selamat! nilai kamu :', font=('Tahoma', 13, 'bold'), foreground='#3E4784',
+          image=gambar7, compound='top', background='#edf2f4').pack()
+    Label(frame4, text=f'{nilai_user}', font=('Comic Sans', 24, 'bold'),foreground='#D82149',
+          background='#edf2f4').pack()
     pemain(player_name.get(),nilai_user)
 
-    tombol_home= tk.Button(frame4, text='Kembali ke Home Menu', command=aksi_tombol_home)
-    tombol_home.pack()
+    tombol_home= tk.Button(main, text='Kembali ke Beranda', bg="#293241",
+              font=('Comic Sans', 9, 'bold'),foreground="#FFFFFF", 
+              relief='raised', command=aksi_tombol_home)
+    tombol_home.place(relx=0.37, rely=0.7)
+
+    tombol_exit= tk.Button(main, text='Keluar', bg="#293241",
+              font=('Comic Sans', 9, 'bold'),foreground="#FFFFFF", 
+              relief='raised', command=aksi_tombol_exit)
+    tombol_exit.place(relx=0.45, rely=0.8)
 
 greeting()
 
 
 main.mainloop()
-
-# import random
-# import math
-# import pandas as pd
-# ## Dict Petanyaan
-# data= {'index':[1,2,3,4,5,6,7,8,9,10],
-#        'pertanyaan':['Nama zat hijau daun?',
-#                      'Nama kingdom dari hewan sapi?',
-#                      'Nama indera perasaa adalah?',
-#                      'Nama fragmen darah yang berfungsi untuk membekukan darah?',
-#                      'Nama bagian tubuh yang menyambungkan antara tulang dan tulang?',
-#                      'Nama alat pernapasan serangga?',
-#                      'Nama enzim pengubah karbohidrat menjadi gula?',
-#                      'Nama bagian tempat pertukaran oksigen dan CO2 di paru-paru?',
-#                      'Nama penyakit yang diakibatkan oleh Salmonella typhi?',
-#                      'Nama zat yang mengakibatkan otot lelah?',
-#                      'Nama tulang terpanjang yang dimiliki manusia?',
-#                      'Nama Saluran yang menghubungkan mulut dengan lambung?',
-#                      'Nama gerakan mendorong makanan dari rongga mulut menuju lambung?',
-#                      'Nama bagian yang berfungsi mengatur cahaya yang masuk ke mata?',
-#                      'Tingkatan taksonomi makhluk hidup di atas species?',
-#                      'Istilah makhluk hidup yang memiliki organ reproduksi ganda?',
-#                      'Nama otot yang berfungsi untuk menggerakan tubuh secara sadar adalah otot?',
-#                      'Nama kemampuan dari makhluk hidup dalam menyamarkan diri dengan lingkungan sekitar disebut?',
-#                      'Simbiosis yang menguntungkan kedua belah pihak adalah?',
-#                      'Nama saat kondisi tubuh kekurangan sel darah merah?'],
-#        'jawaban':['klorofil','animalia','lidah','trombosit','ligamen',
-#                   'trakea','amilase','alveolus','tipes','asam laktat','femur',
-#                   'kerongkongan','peristaltik','pupil','genus','hemaprodit','lurik','mimikri',
-#                   'mutualisme','anemia']}
-
-# ## Exeption handling for Question in Game
-# def question(msg,choice):
-#     cho= [i.lower() for i in choice]
-#     while True:
-#         jwb= input(msg).lower()
-#         if jwb in cho:
-#             return jwb
-#         else:
-#             print(f'\nCek kembali jawabanmu! Hanya {choice} yang diperbolehkan!')
-# def question2(msg,choice):
-#     while True:
-#         jwb= input(msg).lower()
-#         if jwb=='' or jwb=='e':
-#             return jwb
-#         else:
-#             print("Silahkan tekan ENTER untuk melanjutkan atau ketik E' untuk keluar")
-
-
-# ## Data Pemain
-# list_player= []
-# list_score= []
-# def pemain(nama,amount):
-#     if nama in list_player:
-#         a= list_player.index(nama)
-#         if list_score[a]< amount:
-#             list_score[a]=amount
-#     else:
-#         list_player.append(nama)
-#         list_score.append(amount)
-
-# ## Pencaharian
-# def cari():
-#     while True:
-#         try:
-#             siapa= input(f'''\n===={'CARI CAPAIAN PEMAIN':^47}====
-# Siapa nama user yang ingin Anda cari? ''').lower()
-#             a=[]
-#             b=[]
-#             for i in list_player:
-#                 if i==siapa:
-#                     a.append(siapa)
-#                     b.append(list_score[list_player.index(siapa)])
-#             if a!=[]:
-#                 print(f"Pemain dengan nama {a[0]} memiliki nilai terbaik {b[0]}")
-#             else:
-#                 print('Maaf, Nama pemain salah atau belum pernah bermain')
-#         except:
-#             print('Maaf, Nama tidak ditemukan')
-#         r=question(f'\nApakah anda ingin mencari capaian pemain yang lain? (Y/N) ',['Y','N'])
-#         if r=='n':
-#                 break
-
-
-# ## Hapus Data
-# def hapus():
-#     d=question(f'''\n===={'HAPUS CAPAIAN USER':^47}====
-# Apakah Kamu yakin ingin menghapus capaian user {put}? (Y/N) ''',['Y','N'])
-#     if d=='y':
-#         while True:
-#             try:
-#                 b=list_player.index(put)
-#                 n=list_score[b]
-#                 list_player.remove(list_player[b])
-#                 list_score.remove(n)
-#                 print(f'Data pencapaian player {put} berhasil dihapus! ')
-#             except:
-#                 print(f'Maaf, Nama player tidak ditemukan atau belum memiliki riwayat bermain')
-#             input(f'\nSilahkan ketik apapun untuk melanjutkan => ')
-#             break
-
-# ## Leaderboard
-# def board():
-#     dict={'nama':list_player,
-#           'nilai':list_score}
-#     lead= pd.DataFrame(dict)
-#     leaderboard= lead.sort_values('nilai',ascending=False).reset_index(drop=True)
-#     if list_player==[]:
-#         print(f'''\n===={'LEADERBOARD':^47}====
-# Maaf, belum ada data pemain yang tersedia''')
-#     else:
-#         print(f'''\n===={'LEADERBOARD':^47}====
-# {leaderboard.to_string(index=False)}''')
-#     input(f'\nSilahkan ketik apapun untuk melanjutkan => ')
-        
-
-# ## Greeting
-# def greeting():
-#     print(f'''{'-'*56}
-# |{'Welcome to Quezzy':^54}|
-# {'-'*56}''')
-#     lanjut=question2(f'{'Silahkan Tekan Enter':^54}',['','E'])
-#     if lanjut=='e':
-#         return 'exit'
-
-# ## User Name
-# def user():
-#     global put
-#     put= input(f'''
-# Siapa Nama player mu? ''')
-#     print(f'\nHalo {put}, Bagaimana kabarmu hari ini? Semoga sehat selalu ya.')
-
-# ## Homepage
-# def home():
-#     while True:
-#         q= question(f'''\n===={'HOME MENU':^47}====
-# Pilih Menu di bawah ini:
-# A. Mulai Permainan
-# B. Cek Capaian Pemain
-# C. Cek Leadarboard
-# D. Hapus Capaian User
-# E. Keluar
-# Jawab => ''',['A','B','C','D','E'])
-#         if q=='a':
-#             break
-#         elif q=='b':
-#             cari()
-#         elif q=='e':
-#             return 'exit'
-#         elif q=='c':
-#             board()
-#         elif q=='d':
-#             hapus()
-
-# ## Question
-# # random.shuffle(num)
-# def main():
-#     global numb
-#     global benar
-#     global salah
-#     num= list(range(0,21))
-#     selnum= random.sample(num,5)
-#     numb=[]
-#     benar=[]
-#     salah=[]
-#     print(f'''\n===={'MULAI PERMAINAN':^47}====
-# Tugas kamu adalah menjawab pertanyaan berikut dengan tepat.\nMari kita mulaiii!''')
-#     a=0
-#     for i in selnum:
-#         if i not in numb:
-#             a+=1
-#             while True:
-#                 af= input(f"\n{a}. {data['pertanyaan'][i]} ").lower()
-#                 if af=="":
-#                     print(f'\nJawaban tidak boleh kosong!')
-#                 elif af!=data['jawaban'][i]:
-#                     salah.append(i)
-#                     break
-#                 else:
-#                     benar.append(i)
-#                     break
-#             numb.append(i)
-
-
-# ## Result
-# def review():
-#     nilai=int((len(benar)/len(numb))*100)
-#     print(f"\n{'-'*56}")
-#     if nilai==100:
-#         print(f'''|{' ':>20}Nilai Kamu: {nilai}{' ':<19}|
-# |{'Perfect! Nilai Kamu Sempurna!':^54}|''')
-#     elif nilai>=60:
-#         print(f'''|{' ':>20}Nilai Kamu: {nilai}{' ':<20}|
-# |{'Hebat! Kamu hampir memjawab semua dengan benar':^54}|''')
-#     elif nilai>0:
-#         print(f'''|{' ':>20}Nilai Kamu: {nilai}{' ':<20}|
-# |{'Maaf Nilai mu rendah. Belajar lagi ya':^54}|''')
-#     elif nilai==0:
-#         print(f'''|{' ':>21}Nilai Kamu: {nilai}{' ':<20}|
-# |{'Belajar lagi aja dek!':^54}|''')
-#     print(f"{'-'*56}")
-#     pemain(put,nilai)
-    
-# ##  End Greeting
-# def endgreet():
-#     print(f'''\n{'-'*56}
-# |{'Terima Kasih Sudah Bermain!':^54}|
-# {'-'*56}\n''')
-    
-# ## Newgame Offer
-# def newgame():
-#     ask= question('Apakah Anda ingin kembali ke Home Menu? (Y/N) ',['Y','N'])
-#     if ask=='n':
-#         endgreet()
-#         numb.clear()
-#         benar.clear()
-#         salah.clear()
-#         return ask
-#     else:
-#         numb.clear()
-#         benar.clear()
-#         salah.clear()
-
-
-# ## Running the Game
-# while True:
-#     g=greeting()
-#     if g=='exit':
-#         break
-#     user()
-#     while True:
-#         gmn=home()
-#         if gmn=='exit':
-#             endgreet()
-#             break
-#         main()
-#         review()
-#         n= newgame()
-#         if n=='n':
-#             break
